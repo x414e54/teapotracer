@@ -207,11 +207,12 @@ bool AntGUIDialog::Event( UINT uMsg, UINT p1, UINT p2)
 		break;
 		case ANTGUI_EVENT_LBUTTONDOWN:
 		case ANTGUI_EVENT_MOUSEMOVE:
-                //POINT mouse = { short(LOWORD(p2)), short(HIWORD(p2)) };
-                //mouse.x += 4;
-                //mouse.y += 4;
-				AntGUIComponent* intersect=GetIntersect(4,4);
+                POINT mouse = { short(LOWORD(p2)), short(HIWORD(p2)) };
+                mouse.x += 4;
+                mouse.y += 4;
+				AntGUIComponent* intersect=GetIntersect(mouse.x,mouse.y);
 				if (uMsg == ANTGUI_EVENT_LBUTTONDOWN) {
+			  		fprintf(stderr, "Mouse click resviced at %d, %d\n",mouse.x, mouse.y);
 					if (intersect!=NULL) { _focus=intersect; _focus->Event(uMsg, p1, p2); }
 					else { _focus=NULL; }
 					return false;
@@ -484,7 +485,7 @@ bool AntGUIComboBox::Event(UINT uMsg, UINT p1, UINT p2)
 	case ANTGUI_EVENT_MOUSEMOVE:
 		if (_opened)
 		{
-			POINT mouse = {short(0), short(0)};// short(LOWORD(p2)), short(HIWORD(p2)) };
+			POINT mouse = { short(LOWORD(p2)), short(HIWORD(p2)) };
 			mouse.x -= _x;
 			mouse.y -= _y;
 			RECT optionRect = {0,0,Width(_elements.at(6).GetTextureRect()),Height(_elements.at(6).GetTextureRect())};

@@ -1,5 +1,6 @@
 #include "AntSettings.h"
 #include <iostream>
+#include <fstream>
 #include <sstream>
 #include <string>
 
@@ -49,6 +50,16 @@ AntSettings::AntSettings()
 //-----------------------------------------------------------------------------
 void AntSettings::Read()
 {
+	std::string line;
+	std::ifstream settings("settings.ini");
+	if (settings.is_open())
+	{
+		while (settings.good())
+		{
+			std::getline(settings,line);
+	    }
+		settings.close();
+	}
   //HANDLE inF = CreateFile(L"settings.dat", GENERIC_READ, 0, NULL,
 //    OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 

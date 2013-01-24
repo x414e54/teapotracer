@@ -47,18 +47,46 @@ bool AntWrapQuit(AntRenderer* renderer)
 int AntWrapRun()
 {////////// MOVE OUT SDL EVENTS
 	SDL_Event event;
-	float lastTime = 0;//(float)timeGetTime();
+	float lastTime = SDL_GetTicks();//(float)timeGetTime();
 	ANTGUI_EVENT msg;
+	UINT p1 = 0;
+	UINT p2 = 0;
 	while(true)
 	{
 		if(SDL_PollEvent(&event))
 		{
-			if (event.type == SDL_QUIT) return 1;
+			//if (event.type == SDL_QUIT) return 1;
 			//translate SDL message to ant message format
-			if (MsgCallback!=NULL) { MsgCallback(msg, 0, 0); }
+		  	  bool down = false;
+			  switch(event.type)
+			  {
+			  	  case SDL_QUIT: return 1; break;
+			  	  case SDL_MOUSEMOTION:
+			  		  msg = ANTGUI_EVENT_MOUSEMOVE;
+			  		  p2 = SETDWORD(event.motion.x, event.motion.y);
+			  		  break;
+			  	  case SDL_KEYDOWN:
+			  		  down = true;
+			  	  case SDL_KEYUP:
+			  		  //p1 = event.key.keysym.scancode;
+			  	  break;
+			  	  case SDL_MOUSEBUTTONDOWN:
+			  		  down = true;
+			  		  fprintf(stderr, "Mouse click at %d, %d\n",event.button.x, event.button.y);
+			  	  case SDL_MOUSEBUTTONUP:
+			  		  switch (event.button.button)
+			  		  {
+			  		  	  case SDL_BUTTON_LEFT: msg = (down) ? ANTGUI_EVENT_LBUTTONDOWN : ANTGUI_EVENT_LBUTTONUP; break;
+			  		  	  case SDL_BUTTON_MIDDLE: msg = (down) ? ANTGUI_EVENT_MBUTTONDOWN : ANTGUI_EVENT_MBUTTONUP; break;
+			  		  	  case SDL_BUTTON_RIGHT: msg = (down) ? ANTGUI_EVENT_RBUTTONDOWN : ANTGUI_EVENT_RBUTTONUP; break;
+			  		  }
+			  		  p2 = SETDWORD(event.button.y, event.button.x);
+			  		  break;
+			  }
+			if (MsgCallback!=NULL) { MsgCallback(msg, p1, p2); }
 		}
 					{
-						float time = 0;//(float)timeGetTime();
+						float time = SDL_GetTicks();//(float)timeGetTime();
 						float timeDelta = time - lastTime;
 
 						/* If personal callbacks are set then call */

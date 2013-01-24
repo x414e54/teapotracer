@@ -356,6 +356,7 @@ void RunSettings()
 void QuitEventHandler(void* vParam)			// On pressing the quit button
 {
 	//PostQuitMessage(0);
+	exit(0);
 }
 
 void ResumeEventHandler(void* vParam)	// On pressing resume

@@ -1,4 +1,5 @@
 #include "GLRenderer.h"
+#include "TempTeapot.h"
 
 //-----------------------------------------------------------------------------
 // Init opengl
@@ -43,7 +44,6 @@ bool GLRenderer::Init(AntSettings settings)
 void GLRenderer::BeginScene()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	
 }
 
 //-----------------------------------------------------------------------------
@@ -61,8 +61,8 @@ void GLRenderer::SetView(POVector3* pos, POVector3* target)
 {
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	gluLookAt(0.0, 0.0, 5.0,
-	          0.0, 0.0, 0.0,
+	gluLookAt(pos->_1, pos->_2, pos->_3,
+	          target->_1, target->_2, target->_3,
 	          0.0, 1.0, 0.0);
 }
 
@@ -81,12 +81,46 @@ void GLRenderer::SetProjection()
 //-----------------------------------------------------------------------------
 void GLRenderer::DrawMesh(UINT meshId, POVector3* pos, POVector3* o)
 {
-	glBegin(GL_QUADS);
-	        glColor3f(1, 0, 0); glVertex3f(0, 0, 0);
-	        glColor3f(1, 1, 0); glVertex3f(100, 0, 0);
-	        glColor3f(1, 0, 1); glVertex3f(100, 100, 0);
-	        glColor3f(1, 1, 1); glVertex3f(0, 100, 0);
-	    glEnd();
+	glPushMatrix();
+	glRotatef(o->_1, 1, 0, 0);
+	glRotatef(o->_2, 0, 1, 0);
+	glRotatef(o->_3, 0, 0, 1);
+	glTranslatef(pos->_1, pos->_2, pos->_3);
+	glScalef (0.1, 0.1, 0.1);
+	//teapot(10, 1.0f, GL_LINE);
+	  glBegin(GL_QUADS);		// Draw The Cube Using quads
+	    glColor3f(0.0f,1.0f,0.0f);	// Color Blue
+	    glVertex3f( 1.0f, 1.0f,-1.0f);	// Top Right Of The Quad (Top)
+	    glVertex3f(-1.0f, 1.0f,-1.0f);	// Top Left Of The Quad (Top)
+	    glVertex3f(-1.0f, 1.0f, 1.0f);	// Bottom Left Of The Quad (Top)
+	    glVertex3f( 1.0f, 1.0f, 1.0f);	// Bottom Right Of The Quad (Top)
+	    glColor3f(1.0f,0.5f,0.0f);	// Color Orange
+	    glVertex3f( 1.0f,-1.0f, 1.0f);	// Top Right Of The Quad (Bottom)
+	    glVertex3f(-1.0f,-1.0f, 1.0f);	// Top Left Of The Quad (Bottom)
+	    glVertex3f(-1.0f,-1.0f,-1.0f);	// Bottom Left Of The Quad (Bottom)
+	    glVertex3f( 1.0f,-1.0f,-1.0f);	// Bottom Right Of The Quad (Bottom)
+	    glColor3f(1.0f,0.0f,0.0f);	// Color Red
+	    glVertex3f( 1.0f, 1.0f, 1.0f);	// Top Right Of The Quad (Front)
+	    glVertex3f(-1.0f, 1.0f, 1.0f);	// Top Left Of The Quad (Front)
+	    glVertex3f(-1.0f,-1.0f, 1.0f);	// Bottom Left Of The Quad (Front)
+	    glVertex3f( 1.0f,-1.0f, 1.0f);	// Bottom Right Of The Quad (Front)
+	    glColor3f(1.0f,1.0f,0.0f);	// Color Yellow
+	    glVertex3f( 1.0f,-1.0f,-1.0f);	// Top Right Of The Quad (Back)
+	    glVertex3f(-1.0f,-1.0f,-1.0f);	// Top Left Of The Quad (Back)
+	    glVertex3f(-1.0f, 1.0f,-1.0f);	// Bottom Left Of The Quad (Back)
+	    glVertex3f( 1.0f, 1.0f,-1.0f);	// Bottom Right Of The Quad (Back)
+	    glColor3f(0.0f,0.0f,1.0f);	// Color Blue
+	    glVertex3f(-1.0f, 1.0f, 1.0f);	// Top Right Of The Quad (Left)
+	    glVertex3f(-1.0f, 1.0f,-1.0f);	// Top Left Of The Quad (Left)
+	    glVertex3f(-1.0f,-1.0f,-1.0f);	// Bottom Left Of The Quad (Left)
+	    glVertex3f(-1.0f,-1.0f, 1.0f);	// Bottom Right Of The Quad (Left)
+	    glColor3f(1.0f,0.0f,1.0f);	// Color Violet
+	    glVertex3f( 1.0f, 1.0f,-1.0f);	// Top Right Of The Quad (Right)
+	    glVertex3f( 1.0f, 1.0f, 1.0f);	// Top Left Of The Quad (Right)
+	    glVertex3f( 1.0f,-1.0f, 1.0f);	// Bottom Left Of The Quad (Right)
+	    glVertex3f( 1.0f,-1.0f,-1.0f);	// Bottom Right Of The Quad (Right)
+	  glEnd();			// End Drawing The Cube
+	glPopMatrix();
 }
 
 //-----------------------------------------------------------------------------
@@ -94,7 +128,35 @@ void GLRenderer::DrawMesh(UINT meshId, POVector3* pos, POVector3* o)
 //-----------------------------------------------------------------------------
 void GLRenderer::DrawSprite(UINT textureId, RECT* src, POVector3* pos, float sx, float sw, float rotation)
 {
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+	glOrtho(0, 640, 480, 0, 1, -1);
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+	glEnable(GL_TEXTURE_2D);
+	glLoadIdentity();
+	AntTexture* texture = GetTexture(textureId);
+	glBindTexture(GL_TEXTURE_2D, *(GLuint*)texture->texture);
+	//glScaled(sx, sw, 0.0);
+	//glRotatef(rotation, 0.0, 1.0, 0.0);
+	glTranslatef(pos->_1, pos->_2, 0.0);
 
+	float texleft = src->x/texture->w;
+	float texright = (src->x+src->w)/texture->w;
+	float textop = (src->y+src->h)/texture->h;
+	float texbottom = src->y/texture->h;
+
+	glBegin(GL_QUADS);
+		glTexCoord2f(texright, textop);  glVertex3f(0, 0, 0);
+		glTexCoord2f(texleft, textop); glVertex3f(src->h, 0, 0);
+		glTexCoord2f(texleft, texbottom);glVertex3f(src->h, src->w, 0);
+		glTexCoord2f(texright, texbottom);  glVertex3f(0, src->w, 0);
+	glEnd();
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
+	glPopMatrix();
 }
 
 //-----------------------------------------------------------------------------
@@ -110,6 +172,14 @@ void GLRenderer::DrawText(UINT fontId, const std::wstring* string, RECT* dst, An
 //-----------------------------------------------------------------------------
 void GLRenderer::DrawQuad(UINT textureID, RECT* rect, POVector3* pos, POVector3* o)
 {
+	glBindTexture(GL_TEXTURE_2D, *(GLuint*)GetTexture(textureID)->texture);
+
+	glBegin(GL_QUADS);
+	    glTexCoord2f(0, 0); glVertex3f(rect->left, rect->bottom, 0);
+	    glTexCoord2f(1, 0); glVertex3f(rect->right, rect->bottom, 0);
+	    glTexCoord2f(1, 1); glVertex3f(rect->right, rect->top, 0);
+	    glTexCoord2f(0, 1); glVertex3f(rect->left, rect->top, 0);
+	glEnd();
 }
 
 //-----------------------------------------------------------------------------
@@ -130,8 +200,9 @@ void GLRenderer::AddTexture(const std::wstring& fileName)
 	texture->w=0;
 	texture->fileName = fileName;
 
-	char buffer[fileName.length()];
+	char buffer[fileName.length()+1];
 	int ret = wcstombs( buffer, fileName.c_str(), sizeof(buffer) );
+	buffer[sizeof(buffer)]=0;
 	// checking ret here.
 	GLuint* tex = new GLuint();
 	texture->texture = (void*)tex;
