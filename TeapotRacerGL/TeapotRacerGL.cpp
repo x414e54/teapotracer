@@ -199,12 +199,10 @@ void Render(float timeDelta)
 		/* Set the view matrix, the camera posion and target are specifically designed for this */
 		Renderer->SetView(Camera.GetPosition(),Camera.GetTarget());
 
-
 		/* Set the background */
 		RECT rect;
 		SetRect(&rect,0,0,1000,1000);
 		Renderer->DrawQuad(TID_BACKGROUND,&rect,POVector3(Camera.GetTarget()->_1-500,-100.0f,Camera.GetTarget()->_3-500),POVector3(0.0f,0.0f,0.0f));
-
 
 
 		/* Draw the game board and the mini game board */

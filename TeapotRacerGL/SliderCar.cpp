@@ -98,7 +98,7 @@ void SliderCar::Update(float timeDelta)
 	}
 
 	/* Rotate our car in the direction requested */
-	_orientation+=_rot;
+	_orientation+=_rot*timeDelta; /// 2013 added in timeDelta, think of better way to correct this
 
 	if (_orientation>PI) {
 		_orientation=-(PI-(_orientation-PI));

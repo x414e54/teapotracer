@@ -68,6 +68,20 @@ int AntWrapRun()
 			  	  case SDL_KEYDOWN:
 			  		  down = true;
 			  	  case SDL_KEYUP:
+			  		  msg = (down) ? ANTGUI_EVENT_KEYDOWN : ANTGUI_EVENT_KEYUP;
+			  		  switch(event.key.keysym.sym)
+			  		  {
+			  		  	  case SDLK_LEFT: p1 = ANTGUI_EVENT_KEY_LEFT; break;
+			  		  	  case SDLK_UP:  p1 = ANTGUI_EVENT_KEY_UP; break;
+			  		  	  case SDLK_DOWN:  p1 = ANTGUI_EVENT_KEY_DOWN; break;
+			  		  	  case SDLK_RIGHT:  p1 = ANTGUI_EVENT_KEY_RIGHT; break;
+			  		  	  case SDLK_BACKSPACE:  p1 = ANTGUI_EVENT_KEY_BACK; break;
+			  		  	  case SDLK_ESCAPE:  p1 = ANTGUI_EVENT_KEY_ESCAPE; break;
+			  		  	  case SDLK_RETURN:  p1 = ANTGUI_EVENT_KEY_RETURN; break;
+			  		  	  case SDLK_SPACE:  p1 = ANTGUI_EVENT_KEY_SPACE; break;
+			  		  	  case SDLK_LSHIFT:  p1 = ANTGUI_EVENT_KEY_SHIFT; break;
+			  		  	  default: break;
+			  		  }
 			  		  //p1 = event.key.keysym.scancode;
 			  	  break;
 			  	  case SDL_MOUSEBUTTONDOWN:
@@ -79,6 +93,7 @@ int AntWrapRun()
 			  		  	  case SDL_BUTTON_LEFT: msg = (down) ? ANTGUI_EVENT_LBUTTONDOWN : ANTGUI_EVENT_LBUTTONUP; break;
 			  		  	  case SDL_BUTTON_MIDDLE: msg = (down) ? ANTGUI_EVENT_MBUTTONDOWN : ANTGUI_EVENT_MBUTTONUP; break;
 			  		  	  case SDL_BUTTON_RIGHT: msg = (down) ? ANTGUI_EVENT_RBUTTONDOWN : ANTGUI_EVENT_RBUTTONUP; break;
+			  		  	  default: break;
 			  		  }
 			  		  p2 = SETDWORD(event.button.y, event.button.x);
 			  		  break;

@@ -73,7 +73,7 @@ void GLRenderer::SetProjection()
 {
 	   glMatrixMode(GL_PROJECTION);
 	   glLoadIdentity();
-	   gluPerspective(PI * 0.5f, (float)800 / (float)600, 1.0f, 1000.0f);
+	   gluPerspective(90, (float)800 / (float)600, 1.0f, 1000.0f);
 }
 
 //-----------------------------------------------------------------------------
@@ -82,11 +82,11 @@ void GLRenderer::SetProjection()
 void GLRenderer::DrawMesh(UINT meshId, POVector3* pos, POVector3* o)
 {
 	glPushMatrix();
-	glRotatef(o->_1, 1, 0, 0);
-	glRotatef(o->_2, 0, 1, 0);
-	glRotatef(o->_3, 0, 0, 1);
+	//glRotatef(o->_1, 1.0f, 0, 0);
+	//glRotatef(o->_3, 0, 0, 1.0f);
 	glTranslatef(pos->_1, pos->_2, pos->_3);
-	glScalef (0.0125, 0.0125, 0.0125);
+	glRotatef(o->_2*180/PI, 0, 1.0f, 0);
+	//glScalef (0.0125, 0.0125, 0.0125);
 	teapot(10, 1.0f, GL_LINE);
 	glPopMatrix();
 }
@@ -106,7 +106,7 @@ void GLRenderer::DrawSprite(UINT textureId, RECT* src, POVector3* pos, float sx,
 	glLoadIdentity();
 	AntTexture* texture = GetTexture(textureId);
 	glBindTexture(GL_TEXTURE_2D, *(GLuint*)texture->texture);
-	//glRotatef(rotation, 0.0, 1.0, 0.0);
+	glRotatef(rotation, 0.0, 0.0, 1.0f);
 	glTranslatef(pos->_1, pos->_2, 0.0);
 	glScaled(sx, sw, 0.0);
 
@@ -145,16 +145,16 @@ void GLRenderer::DrawQuad(UINT textureID, RECT* rect, POVector3* pos, POVector3*
 {
 	glPushMatrix();
 	glEnable(GL_TEXTURE_2D);
-	//glRotatef(o->_2, 0, 1, 0);
 	glTranslatef(pos->_1, pos->_2, pos->_3);
+	glRotatef(o->_2*180/PI, 0, 1.0f, 0);
 	glBindTexture(GL_TEXTURE_2D, *(GLuint*)GetTexture(textureID)->texture);
 
 	glBegin(GL_QUADS);
 		glColor3f(1.0f,1.0f,1.0f);
-	    glTexCoord2f(0, 1); glVertex3f(rect->left, 0, rect->bottom);
-	    glTexCoord2f(1, 1); glVertex3f(rect->right, 0, rect->bottom);
-	    glTexCoord2f(1, 0); glVertex3f(rect->right, 0, rect->top);
-	    glTexCoord2f(0, 0); glVertex3f(rect->left, 0, rect->top);
+	    glTexCoord2f(0, 1); glVertex3f(rect->x, 0, rect->y);
+	    glTexCoord2f(1, 1); glVertex3f(rect->w, 0, rect->y);
+	    glTexCoord2f(1, 0); glVertex3f(rect->w, 0, rect->h);
+	    glTexCoord2f(0, 0); glVertex3f(rect->x, 0, rect->h);
 	glEnd();
 
 	glPopMatrix();
