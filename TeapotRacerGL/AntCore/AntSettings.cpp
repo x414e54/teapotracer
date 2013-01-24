@@ -63,6 +63,7 @@ void AntSettings::Read()
   //ReadFile(inF, &_fullscreen, 1, &bytesRead, NULL);
 
   //CloseHandle(inF);
+  //fprintf(stderr,"SettingsReadFailed(CannotContinue)");
 }
 
 //-----------------------------------------------------------------------------

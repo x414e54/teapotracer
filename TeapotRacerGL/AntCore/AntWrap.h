@@ -13,7 +13,7 @@
 #include "Ant.h"
 #include "AntSettings.h"
 #include "AntRenderer.h"
-#include <SDL/SDL.h>
+
 typedef void (* PRENDERCALLBACK)(float timeDelta);
 typedef bool (* PMSGCALLBACK)(UINT msg, UINT p1, UINT p2);
 

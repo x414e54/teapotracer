@@ -96,13 +96,13 @@ public:
 	~AntGUIDialog();
 	void Init(AntRenderer* renderer);
 
-	void AddImageText(int id, std::wstring string, int x, int y, int h, int w);
-	void AddButton(int id, std::wstring string, int x, int y, int h, int w);
+	void AddImageText(int id, const std::wstring& string, int x, int y, int h, int w);
+	void AddButton(int id, const std::wstring& string, int x, int y, int h, int w);
 	void AddComboBox(int id, int x, int y, int h, int w);
-	void AddCheckBox(int id, std::wstring string, int x, int y, int h, int w);
-	void AddTextBox(int id, std::wstring string, int x, int y, int h, int w);
-	void AddTextArea(int id, std::wstring string, int x, int y, int h, int w);
-	void AddListBox(int id, std::wstring string, int x, int y, int h, int w);
+	void AddCheckBox(int id, const std::wstring& string, int x, int y, int h, int w);
+	void AddTextBox(int id, const std::wstring& string, int x, int y, int h, int w);
+	void AddTextArea(int id, const std::wstring& string, int x, int y, int h, int w);
+	void AddListBox(int id, const std::wstring& string, int x, int y, int h, int w);
 	void AddSlider(int id, int x, int y, int h, int w, int min=0, int max=100, int value=0);
 	void AddProgressBar(int id, int x, int y, int h, int w, int min=0, int max=100, int value=0);
 
@@ -127,7 +127,7 @@ public:
     bool Event(UINT Event, UINT p1, UINT p2);
 	void Render(float time);
 
-	void DrawText(UINT fontId, std::wstring string, AntFontColorARGB* fontColor, RECT* dst);
+	void DrawText(UINT fontId, const std::wstring& string, AntFontColorARGB* fontColor, RECT* dst);
 	void DrawSprite(UINT textureID, RECT* src, RECT* dst);
 
 	void Show(bool show) { _visible=show; }
@@ -198,8 +198,8 @@ class AntGUIImageText : public AntGUIComponent
 public:
 	AntGUIImageText(AntGUIDialog* parent=NULL);
 	
-	void SetText(std::wstring text);
-	std::wstring GetText() { return _text; }
+	void SetText(const std::wstring& text);
+	std::wstring* GetText() { return &_text; }
 
 	virtual void Render(float time);
 
@@ -254,7 +254,7 @@ public:
 
 	virtual void Render(float time);
 	virtual bool Event(UINT Event, UINT p1, UINT p2);
-	void AddOption(int id, std::wstring text, void** userData);
+	void AddOption(int id, const std::wstring& text, void** userData);
 	void SetSelected(int id);
 	void Open() { _opened=true; }
 	
@@ -363,7 +363,7 @@ class AntGUITab : public AntGUIImageText
 //-----------------------------------------------------------------------------
 class AntGUITabPane : public AntGUIComponent
 {
-	void AddPane(int id, std::wstring text, AntGUIDialog *pane);
+	void AddPane(int id, std::wstring& text, AntGUIDialog *pane);
 	void GetPane(int id);
 
 	bool Event(UINT Event, UINT p1, UINT p2);

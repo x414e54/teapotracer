@@ -3,49 +3,36 @@
 //-----------------------------------------------------------------------------
 // Init opengl
 //-----------------------------------------------------------------------------
-bool GLRenderer::Init(void* wnd, AntSettings settings)
+bool GLRenderer::Init(AntSettings settings)
 {
-		/*HRESULT hr;
+		if(SDL_Init(SDL_INIT_VIDEO) < 0 )
+		{
+			return false;
+		}
 
-		IDirect3D9* d3d9;
-		d3d9 = Direct3DCreate9(D3D_SDK_VERSION);
+		SDL_GL_SetAttribute(SDL_GL_RED_SIZE,            8);
+		SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE,          8);
+		SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE,           8);
+		SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE,          8);
+ 
+		SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE,          16);
+		SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE,            32);
+ 
+		SDL_GL_SetAttribute(SDL_GL_ACCUM_RED_SIZE,        8);
+		SDL_GL_SetAttribute(SDL_GL_ACCUM_GREEN_SIZE,    8);
+		SDL_GL_SetAttribute(SDL_GL_ACCUM_BLUE_SIZE,        8);
+		SDL_GL_SetAttribute(SDL_GL_ACCUM_ALPHA_SIZE,    8);
+ 
+		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS,  1);
+ 
+		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES,  2);
+		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
-		D3DCAPS9 caps;
-		d3d9->GetDeviceCaps(
-			D3DADAPTER_DEFAULT,
-			D3DDEVTYPE_HAL,
-			&caps);
-		
-		D3DPRESENT_PARAMETERS d3dpp;
-		d3dpp.BackBufferWidth				= settings._width;
-		d3dpp.BackBufferHeight				= settings._height;
-		d3dpp.BackBufferFormat				= D3DFMT_A8R8G8B8;
-		d3dpp.BackBufferCount				= 1;
-		d3dpp.MultiSampleType				= (D3DMULTISAMPLE_TYPE)settings._multiSampleType;
-		d3dpp.MultiSampleQuality			= 0;
-		d3dpp.SwapEffect					= D3DSWAPEFFECT_DISCARD;
-		d3dpp.hDeviceWindow					= 0;
-		d3dpp.Windowed						= !settings._fullscreen;
-		d3dpp.EnableAutoDepthStencil		= true;
-		d3dpp.AutoDepthStencilFormat		= D3DFMT_D24S8;
-		d3dpp.Flags							= 0;
-		d3dpp.FullScreen_RefreshRateInHz	= D3DPRESENT_RATE_DEFAULT;
-		d3dpp.PresentationInterval			= D3DPRESENT_INTERVAL_IMMEDIATE;
+		SDL_Surface *bg;
+		SDL_Surface* screen = SDL_SetVideoMode(640, 480, 32, SDL_HWSURFACE | SDL_OPENGL);
+		SDL_WM_SetCaption("NAme","O");
 
-		_device = 0;
-		hr = d3d9->CreateDevice(
-				D3DADAPTER_DEFAULT,
-				D3DDEVTYPE_HAL,
-				hWnd,
-				D3DCREATE_HARDWARE_VERTEXPROCESSING,
-				&d3dpp,
-				(IDirect3DDevice9 **)&_device);
-
-		d3d9->Release();
-
-		if (FAILED(hr))	{ MessageBox(0, L"DXInitFailedError(CannotContinue)", 0, 0); return false; }
-
-		D3DXCreateSprite(_device, &_sprite);*/
+		glClearColor(1, 1, 1, 1);
 
 		return true;
 }
@@ -55,9 +42,8 @@ bool GLRenderer::Init(void* wnd, AntSettings settings)
 //-----------------------------------------------------------------------------
 void GLRenderer::BeginScene()
 {
-	if (_device)
-	{
-	}
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	
 }
 
 //-----------------------------------------------------------------------------
@@ -65,9 +51,7 @@ void GLRenderer::BeginScene()
 //-----------------------------------------------------------------------------
 void GLRenderer::EndScene()
 {
-	if (_device)
-	{
-	}
+	SDL_GL_SwapBuffers();//SwapBuffers(m_deviceContext);
 }
 
 //-----------------------------------------------------------------------------
@@ -75,7 +59,11 @@ void GLRenderer::EndScene()
 //-----------------------------------------------------------------------------
 void GLRenderer::SetView(POVector3* pos, POVector3* target)
 {
-
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	gluLookAt(0.0, 0.0, 5.0,
+	          0.0, 0.0, 0.0,
+	          0.0, 1.0, 0.0);
 }
 
 //-----------------------------------------------------------------------------
@@ -83,7 +71,9 @@ void GLRenderer::SetView(POVector3* pos, POVector3* target)
 //-----------------------------------------------------------------------------
 void GLRenderer::SetProjection()
 {
-
+	   glMatrixMode(GL_PROJECTION);
+	   glLoadIdentity();
+	   gluPerspective(3.14f * 0.5f, (float)800 / (float)600, 1.0f, 1000.0f);
 }
 
 //-----------------------------------------------------------------------------
@@ -91,7 +81,12 @@ void GLRenderer::SetProjection()
 //-----------------------------------------------------------------------------
 void GLRenderer::DrawMesh(UINT meshId, POVector3* pos, POVector3* o)
 {
-
+	glBegin(GL_QUADS);
+	        glColor3f(1, 0, 0); glVertex3f(0, 0, 0);
+	        glColor3f(1, 1, 0); glVertex3f(100, 0, 0);
+	        glColor3f(1, 0, 1); glVertex3f(100, 100, 0);
+	        glColor3f(1, 1, 1); glVertex3f(0, 100, 0);
+	    glEnd();
 }
 
 //-----------------------------------------------------------------------------
@@ -105,8 +100,9 @@ void GLRenderer::DrawSprite(UINT textureId, RECT* src, POVector3* pos, float sx,
 //-----------------------------------------------------------------------------
 // 
 //-----------------------------------------------------------------------------
-void GLRenderer::DrawText(UINT fontId, std::wstring string, RECT* dst, AntFontColorARGB* fontColor)
+void GLRenderer::DrawText(UINT fontId, const std::wstring* string, RECT* dst, AntFontColorARGB* fontColor)
 {
+	//if (string.empty())
 }
 
 //-----------------------------------------------------------------------------
@@ -114,13 +110,12 @@ void GLRenderer::DrawText(UINT fontId, std::wstring string, RECT* dst, AntFontCo
 //-----------------------------------------------------------------------------
 void GLRenderer::DrawQuad(UINT textureID, RECT* rect, POVector3* pos, POVector3* o)
 {
-
 }
 
 //-----------------------------------------------------------------------------
 // 
 //-----------------------------------------------------------------------------
-void GLRenderer::AddFont(std::wstring typeFace, UINT width, UINT height)
+void GLRenderer::AddFont(const std::wstring& typeFace, UINT width, UINT height)
 {
 
 }
@@ -128,15 +123,41 @@ void GLRenderer::AddFont(std::wstring typeFace, UINT width, UINT height)
 //-----------------------------------------------------------------------------
 // 
 //-----------------------------------------------------------------------------
-void GLRenderer::AddTexture(std::wstring fileName)
+void GLRenderer::AddTexture(const std::wstring& fileName)
 {
+	AntTexture* texture = new AntTexture;
+	texture->h=0;
+	texture->w=0;
+	texture->fileName = fileName;
 
+	char buffer[fileName.length()];
+	int ret = wcstombs( buffer, fileName.c_str(), sizeof(buffer) );
+	// checking ret here.
+	GLuint* tex = new GLuint();
+	texture->texture = (void*)tex;
+	SDL_Surface *surface;
+	surface = IMG_Load(buffer);
+	if (!surface) { fprintf(stderr,"TextureLoadFailed(FileNotFound)"); return; }
+	glGenTextures( 1, (GLuint*)texture->texture );
+	glBindTexture( GL_TEXTURE_2D, *(GLuint*)texture->texture );
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+	glTexImage2D( GL_TEXTURE_2D, 0, surface->format->BytesPerPixel, surface->w, surface->h, 0,
+			GL_RGBA, GL_UNSIGNED_BYTE, surface->pixels );
+	texture->h=surface->h;
+	texture->w=surface->w;
+	SDL_FreeSurface( surface );
+	if (texture!=0) {
+		_textures.push_back(texture);
+	} else {
+		fprintf(stderr,"TextureLoadFailed(TryingToContinue)");
+	}
 }
 
 //-----------------------------------------------------------------------------
 // 
 //-----------------------------------------------------------------------------
-void GLRenderer::AddMesh(std::wstring fileName)
+void GLRenderer::AddMesh(const std::wstring& fileName)
 {
 
 }

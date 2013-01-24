@@ -9,28 +9,22 @@ PMSGCALLBACK MsgCallback;
 //-----------------------------------------------------------------------------
 bool AntWrapInit(AntRenderer** device, AntSettings settings, wchar_t* wndName)
 {
-	// This could be moved to antwrapsdl and have two versions?
-
-	if(SDL_Init(SDL_INIT_VIDEO) < 0 )
-	{
-		throw SDL_GetError();
-	}
-
-	SDL_Surface *bg;
-	SDL_Surface* screen = SDL_SetVideoMode(640, 480, 0, 0);
-	SDL_WM_SetCaption("NAme","O");
-
 	/* Choose specific Init - DirectX or OpenGL */
 	if (settings._deviceType==ANTDEVICE_DX) // DirectX
 	{
+		fprintf(stderr,"DirectXNotImplementedError(CannotContinue)");
+		return false;
 		//MessageBox(0, L"DirectXNotImplementedError(CannotContinue)", 0, 0);
-
 	} else if (settings._deviceType==ANTDEVICE_GL) { // Open GL
 		*device = new GLRenderer();
-		(*device)->Init(screen, settings);
-		return false;
+		(*device)->Init(settings);
+	//} else if (settings._deviceType==ANTDEVICE_GLFW) // Open GL
+	//{
+	//	fprintf(stderr,"GLFWNotImplementedError(CannotContinue)");
+		//MessageBox(0, L"GLFWNotImplementedError(CannotContinue)", 0, 0);
 	} else
 	{
+		fprintf(stderr,"InvalidRendererChoice(CannotContinue)");
 		//MessageBox(0, L"InvalidRendererChoice(CannotContinue)", 0, 0);
 		return false;
 	}
@@ -51,7 +45,7 @@ bool AntWrapQuit(AntRenderer* renderer)
 // Our main loop
 //-----------------------------------------------------------------------------
 int AntWrapRun()
-{
+{////////// MOVE OUT SDL EVENTS
 	SDL_Event event;
 	float lastTime = 0;//(float)timeGetTime();
 	ANTGUI_EVENT msg;

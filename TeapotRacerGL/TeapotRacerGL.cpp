@@ -23,6 +23,7 @@
 #include "AntCore/AntActor.h"
 #include "AntCore/AntCamera.h"
 #include "AntCore/AntMath.h"
+#include "AntCore/GLRenderer.h"
 
 // Game Specific includes
 #include "Game.h"
@@ -79,7 +80,8 @@ int main(int argc, char* argv)
 	Settings.Read();
 	rotation=0.0f;
 	if(!AntWrapInit(&Renderer, Settings, L"TeapotRacer")) {
-		//MessageBox(0, L"DisplayInitFailed(CannotContinue)", 0, 0); return -1;
+		fprintf(stderr,"DisplayInitFailed(CannotContinue)"); return -1;
+		//MessageBox(0, L"DisplayInitFailed(CannotContinue)", 0, 0);
 	}
 
 	AntWrapSetRenderCallBack(Render);
@@ -100,6 +102,8 @@ int main(int argc, char* argv)
 void Init()
 {
 	StartDlg.Init(Renderer);
+
+	/// MOVE TO CSS
 
 	/* The game into menu Dialog */
 	StartDlg.Init(Renderer);

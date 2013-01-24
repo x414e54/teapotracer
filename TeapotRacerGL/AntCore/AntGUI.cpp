@@ -48,7 +48,7 @@ void AntGUIDialog::Init(AntRenderer* renderer)
 	_renderer->AddTexture(L"firsttexture.bmp");
 }
 
-void AntGUIDialog::AddImageText(int id, std::wstring text, int x, int y, int h, int w)
+void AntGUIDialog::AddImageText(int id, const std::wstring& text, int x, int y, int h, int w)
 {
 	AntGUIImageText* component = new AntGUIImageText(this);
 	
@@ -60,7 +60,7 @@ void AntGUIDialog::AddImageText(int id, std::wstring text, int x, int y, int h, 
 	component->SetText(text);
 }
 
-void AntGUIDialog::AddButton(int id, std::wstring text, int x, int y, int h, int w)
+void AntGUIDialog::AddButton(int id, const std::wstring& text, int x, int y, int h, int w)
 {
 	AntGUIButton* component = new AntGUIButton(this);
 	
@@ -83,7 +83,7 @@ void AntGUIDialog::AddComboBox(int id, int x, int y, int h, int w)
 	component->SetSize(h,w);
 }
 
-void AntGUIDialog::AddCheckBox(int id, std::wstring text, int x, int y, int h, int w)
+void AntGUIDialog::AddCheckBox(int id, const std::wstring& text, int x, int y, int h, int w)
 {
 	AntGUICheckBox* component = new AntGUICheckBox(this);
 	
@@ -95,7 +95,7 @@ void AntGUIDialog::AddCheckBox(int id, std::wstring text, int x, int y, int h, i
 	component->SetText(text);
 }
 
-void AntGUIDialog::AddTextBox(int id, std::wstring text, int x, int y, int h, int w)
+void AntGUIDialog::AddTextBox(int id, const std::wstring& text, int x, int y, int h, int w)
 {
 	AntGUITextBox* component = new AntGUITextBox(this);
 	
@@ -107,7 +107,7 @@ void AntGUIDialog::AddTextBox(int id, std::wstring text, int x, int y, int h, in
 	component->SetText(text);
 }
 
-void AntGUIDialog::AddTextArea(int id, std::wstring text, int x, int y, int h, int w)
+void AntGUIDialog::AddTextArea(int id, const std::wstring& text, int x, int y, int h, int w)
 {
 	AntGUITextArea* component = new AntGUITextArea(this);
 	
@@ -119,7 +119,7 @@ void AntGUIDialog::AddTextArea(int id, std::wstring text, int x, int y, int h, i
 	component->SetText(text);
 }
 
-void AntGUIDialog::AddListBox(int id, std::wstring text, int x, int y, int h, int w)
+void AntGUIDialog::AddListBox(int id, const std::wstring& text, int x, int y, int h, int w)
 {
 	AntGUIListBox* component = new AntGUIListBox(this);
 	
@@ -238,7 +238,7 @@ void AntGUIDialog::Render(float time)
 	}
 }
 
-void AntGUIDialog::DrawText(UINT fontId, std::wstring string, AntFontColorARGB* fontColor, RECT* dst)
+void AntGUIDialog::DrawText(UINT fontId, const std::wstring& string, AntFontColorARGB* fontColor, RECT* dst)
 {
 	OffsetRect(dst, _x, _y);
 	//int h=_renderer->GetFont(fontId)->h;
@@ -246,7 +246,6 @@ void AntGUIDialog::DrawText(UINT fontId, std::wstring string, AntFontColorARGB* 
 	//dst->left+=(Height(dst)-h)/2;
 	//dst->top+=(Height(dst)-h)/2;
 
-	if (string.empty()) { string=L""; }
 	//_manager->GetFont(fontId)->dxfont->DrawText(_manager->GetSprite().dxsprite, string, -1, &dst, 0, D3DCOLOR_ARGB(fontColor._A, fontColor._R, fontColor._G, fontColor._B));
 	_renderer->DrawText(fontId, string, dst, fontColor);
 }
@@ -298,7 +297,7 @@ AntGUIImageText::AntGUIImageText(AntGUIDialog* parent)
 	_parent=parent;
 }
 	
-void AntGUIImageText::SetText(std::wstring text)
+void AntGUIImageText::SetText(const std::wstring& text)
 {
 	this->_text = text;
 }
@@ -421,7 +420,7 @@ AntGUIComboBox::AntGUIComboBox(AntGUIDialog* parent)
 	_opened=false;
 }
 
-void AntGUIComboBox::AddOption(int id, std::wstring text, void** userData)
+void AntGUIComboBox::AddOption(int id, const std::wstring& text, void** userData)
 {
 	AntGUIComboBoxOption option;
 	this->_text = text;

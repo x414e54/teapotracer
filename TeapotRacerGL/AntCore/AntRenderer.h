@@ -25,7 +25,7 @@
 //-----------------------------------------------------------------------------
 struct AntFont
 {
-	wchar_t* typeFace[MAX_PATH];
+	std::wstring typeFace;
 	unsigned int  h;
 	unsigned int  w;
 	void* font;
@@ -33,7 +33,7 @@ struct AntFont
 
 struct AntTexture
 {
-	wchar_t* fileName[MAX_PATH];
+	std::wstring fileName;
 	void* texture;
 	unsigned int w;
 	unsigned int h;
@@ -41,7 +41,7 @@ struct AntTexture
 
 struct AntMesh
 {
-	wchar_t* fileName[MAX_PATH];
+	std::wstring fileName;
 	void* mesh;
 };
 
@@ -70,14 +70,14 @@ public:
 	virtual void DrawSprite(UINT textureId, RECT* src, POVector3* pos, float sx, float sw, float rotation) { return; }
 	virtual void DrawSprite(UINT textureId, RECT* src, POVector3 pos, float sx, float sw, float rotation) { return DrawSprite(textureId, src, &pos, sx, sw, rotation); }
 	virtual void DrawSprite(UINT textureID, RECT* src, POVector3* pos) { DrawSprite(textureID, src, pos, 1.0f, 1.0f, 0.0f); }
-	virtual void DrawText(UINT fontId, std::wstring string, RECT* dst, AntFontColorARGB* fontColor) { return; }
+	virtual void DrawText(UINT fontId, const std::wstring& string, RECT* dst, AntFontColorARGB* fontColor) { return; }
 	virtual void DrawQuad(UINT textureID, RECT* rect, POVector3* pos, POVector3* Or) { return; }
 	virtual void DrawQuad(UINT textureID, RECT* rect, POVector3 pos, POVector3 Or) { return DrawQuad(textureID, rect, &pos, &Or); }
 	virtual bool Cleanup() { return false; }
-	virtual bool Init(void* wnd, AntSettings settings) { return false; }
-	virtual void AddFont(std::wstring typeFace, UINT width, UINT height) { return; }
-	virtual void AddTexture(std::wstring fileName) { return; }
-	virtual void AddMesh(std::wstring fileName) { return; }
+	virtual bool Init(AntSettings settings) { return false; }
+	virtual void AddFont(const std::wstring& typeFace, UINT width, UINT height) { return; }
+	virtual void AddTexture(const std::wstring& fileName) { return; }
+	virtual void AddMesh(const std::wstring& fileName) { return; }
 	AntFont* GetFont(UINT id) { return _fonts.at(id); }
 	AntTexture* GetTexture(UINT id) { return _textures.at(id); }
 	AntMesh* GetMesh(UINT id) { return _meshes.at(id); }
