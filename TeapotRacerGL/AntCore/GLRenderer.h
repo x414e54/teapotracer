@@ -42,7 +42,7 @@ public:
 	bool Cleanup();
 	bool Init(AntSettings settings);
 	void AddFont(const std::wstring& typeFace, UINT width, UINT height);
-	void AddTexture(const std::wstring& fileName);
+	void AddTexture(UINT textureID, const std::wstring& fileName);
 	void AddMesh(const std::wstring& fileName);
 
 protected:

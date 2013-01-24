@@ -11,6 +11,7 @@
 #define PHYSICSONE_H
 
 #include <math.h>
+#include "AntMath.h"
 
 struct POVector3
 {

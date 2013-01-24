@@ -76,7 +76,7 @@ public:
 	virtual bool Cleanup() { return false; }
 	virtual bool Init(AntSettings settings) { return false; }
 	virtual void AddFont(const std::wstring& typeFace, UINT width, UINT height) { return; }
-	virtual void AddTexture(const std::wstring& fileName) { return; }
+	virtual void AddTexture(UINT textureID, const std::wstring& fileName) { return; }
 	virtual void AddMesh(const std::wstring& fileName) { return; }
 	AntFont* GetFont(UINT id) { return _fonts.at(id); }
 	AntTexture* GetTexture(UINT id) { return _textures.at(id); }

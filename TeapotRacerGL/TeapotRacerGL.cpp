@@ -51,6 +51,14 @@ bool TargetingAI=false;							// Bool to show if the camera is targeting AI or P
 #define PLAYERONE_ID			0
 #define AIPLAYER_ID				1
 
+// Texture Ids.
+#define TID_GUI 0
+#define TID_TRACKSTRAIGHT 1
+#define TID_TRACKBRIDGE 2
+#define TID_TRACKTURN 3
+#define TID_BACKGROUND 4
+#define TID_PLAYERBLIP 5
+
 //-----------------------------------------------------------------------------
 // Forward declarations
 //-----------------------------------------------------------------------------
@@ -154,11 +162,12 @@ void Init()
 
 	/* AddMeshes, and textures - in this case AddMesh will always create the DirectX teapot prefab mesh. */
 	Renderer->AddMesh(L"blah");
-	Renderer->AddTexture(L"trackstraight.bmp");
-	Renderer->AddTexture(L"trackbridge.bmp");
-	Renderer->AddTexture(L"trackturn.bmp");
-	Renderer->AddTexture(L"background.bmp");
-	Renderer->AddTexture(L"playerblip.bmp");
+	Renderer->AddTexture(TID_GUI, L"firsttexture.bmp");
+	Renderer->AddTexture(TID_TRACKSTRAIGHT, L"trackstraight.bmp");
+	Renderer->AddTexture(TID_TRACKBRIDGE, L"trackbridge.bmp");
+	Renderer->AddTexture(TID_TRACKTURN, L"trackturn.bmp");
+	Renderer->AddTexture(TID_BACKGROUND, L"background.bmp");
+	Renderer->AddTexture(TID_PLAYERBLIP, L"playerblip.bmp");
 }
 
 //-----------------------------------------------------------------------------
@@ -191,10 +200,10 @@ void Render(float timeDelta)
 		Renderer->SetView(Camera.GetPosition(),Camera.GetTarget());
 
 
-		/* Set the text for the speed and throttle setting on the HUD */
+		/* Set the background */
 		RECT rect;
 		SetRect(&rect,0,0,1000,1000);
-		Renderer->DrawQuad(7,&rect,POVector3(Camera.GetTarget()->_1-500,-100.0f,Camera.GetTarget()->_3-500),POVector3(0.0f,0.0f,0.0f));
+		Renderer->DrawQuad(TID_BACKGROUND,&rect,POVector3(Camera.GetTarget()->_1-500,-100.0f,Camera.GetTarget()->_3-500),POVector3(0.0f,0.0f,0.0f));
 
 
 
@@ -211,24 +220,24 @@ void Render(float timeDelta)
 				switch(Game.GetBoardCell(i,j)[0])
 				{
 				case 1:
-					Renderer->DrawQuad(4,&rect,POVector3((10.0f*i)+quadxoffset,0.0f,(10.0f*j+quadyoffset)),POVector3(0.0f,PI/2,0.0f)); // Different pieces will need different rotations
-					Renderer->DrawSprite(4,NULL,POVector3((16.0f*i)+xoffset,(-16.0f*j)+yoffset,0.0f), 0.125f, 0.125f, 0.0f);
+					Renderer->DrawQuad(TID_TRACKSTRAIGHT,&rect,POVector3((10.0f*i)+quadxoffset,0.0f,(10.0f*j+quadyoffset)),POVector3(0.0f,PI/2,0.0f)); // Different pieces will need different rotations
+					Renderer->DrawSprite(TID_TRACKSTRAIGHT,NULL,POVector3((16.0f*i)+xoffset,(-16.0f*j)+yoffset,0.0f), 0.125f, 0.125f, 0.0f);
 				break;
 				case 2:
-					Renderer->DrawQuad(4,&rect,POVector3((10.0f*i)+quadxoffset,0.0f,(10.0f*j+quadyoffset)),POVector3(0.0f,0.0f,0.0f));
-					Renderer->DrawSprite(4,NULL,POVector3((16.0f*i)+xoffset,(-16.0f*j)+yoffset,0.0f), 0.125f, 0.125f, 0.0f);
+					Renderer->DrawQuad(TID_TRACKSTRAIGHT,&rect,POVector3((10.0f*i)+quadxoffset,0.0f,(10.0f*j+quadyoffset)),POVector3(0.0f,0.0f,0.0f));
+					Renderer->DrawSprite(TID_TRACKSTRAIGHT,NULL,POVector3((16.0f*i)+xoffset,(-16.0f*j)+yoffset,0.0f), 0.125f, 0.125f, 0.0f);
 				break;
 				case 3:
-					Renderer->DrawQuad(6,&rect,POVector3((10.0f*i)+quadxoffset,0.0f,(10.0f*j+quadyoffset)),POVector3(0.0f,PI/2,0.0f));
-					Renderer->DrawSprite(6,NULL,POVector3((16.0f*i)+xoffset,(-16.0f*j)+yoffset,0.0f), 0.125f, 0.125f, 0.0f);
+					Renderer->DrawQuad(TID_TRACKTURN,&rect,POVector3((10.0f*i)+quadxoffset,0.0f,(10.0f*j+quadyoffset)),POVector3(0.0f,PI/2,0.0f));
+					Renderer->DrawSprite(TID_TRACKTURN,NULL,POVector3((16.0f*i)+xoffset,(-16.0f*j)+yoffset,0.0f), 0.125f, 0.125f, 0.0f);
 				break;
 				case 4:
-					Renderer->DrawQuad(6,&rect,POVector3((10.0f*i)+quadxoffset,0.0f,(10.0f*j+quadyoffset)),POVector3(0.0f,0.0f,0.0f));
-					Renderer->DrawSprite(6,NULL,POVector3((16.0f*i)+xoffset,(-16.0f*j)+yoffset,0.0f), 0.125f, 0.125f, 0.0f);
+					Renderer->DrawQuad(TID_TRACKTURN,&rect,POVector3((10.0f*i)+quadxoffset,0.0f,(10.0f*j+quadyoffset)),POVector3(0.0f,0.0f,0.0f));
+					Renderer->DrawSprite(TID_TRACKTURN,NULL,POVector3((16.0f*i)+xoffset,(-16.0f*j)+yoffset,0.0f), 0.125f, 0.125f, 0.0f);
 				break;
 				case 5:
-					Renderer->DrawQuad(5,&rect,POVector3((10.0f*i)+quadxoffset,0.0f,(10.0f*j+quadyoffset)),POVector3(0.0f,0.0f,0.0f));
-					Renderer->DrawSprite(5,NULL,POVector3((16.0f*i)+xoffset,(-16.0f*j)+yoffset,0.0f), 0.125f, 0.125f, 0.0f);
+					Renderer->DrawQuad(TID_TRACKBRIDGE,&rect,POVector3((10.0f*i)+quadxoffset,0.0f,(10.0f*j+quadyoffset)),POVector3(0.0f,0.0f,0.0f));
+					Renderer->DrawSprite(TID_TRACKBRIDGE,NULL,POVector3((16.0f*i)+xoffset,(-16.0f*j)+yoffset,0.0f), 0.125f, 0.125f, 0.0f);
 				break;
 
 				}
@@ -241,7 +250,7 @@ void Render(float timeDelta)
 		for (SliderCar** i=players; i<players+noPlayers; i++)
 		{
 			Renderer->DrawMesh(0,(*i)->GetPosition(), POVector3(0.0f, (*i)->GetOrientation(), 0.0f));
-			Renderer->DrawSprite(8,NULL,POVector3(((*i)->GetPosition()->_1*1.5)+xoffset,(-(*i)->GetPosition()->_3*1.5)+yoffset,0.0f), 1.0f, 1.0f, 0.0f);
+			Renderer->DrawSprite(TID_PLAYERBLIP,NULL,POVector3(((*i)->GetPosition()->_1*1.5)+xoffset,(-(*i)->GetPosition()->_3*1.5)+yoffset,0.0f), 1.0f, 1.0f, 0.0f);
 		}			
 		delete players;
 

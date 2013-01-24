@@ -45,7 +45,6 @@ void AntGUIDialog::Init(AntRenderer* renderer)
 	_renderer=renderer;
 	_renderer->AddFont(L"MS Sans Serif",8,12);
 	_renderer->AddFont(L"Arial",8,12);
-	_renderer->AddTexture(L"firsttexture.bmp");
 }
 
 void AntGUIDialog::AddImageText(int id, const std::wstring& text, int x, int y, int h, int w)

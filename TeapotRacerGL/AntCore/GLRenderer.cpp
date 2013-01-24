@@ -73,7 +73,7 @@ void GLRenderer::SetProjection()
 {
 	   glMatrixMode(GL_PROJECTION);
 	   glLoadIdentity();
-	   gluPerspective(3.14f * 0.5f, (float)800 / (float)600, 1.0f, 1000.0f);
+	   gluPerspective(PI * 0.5f, (float)800 / (float)600, 1.0f, 1000.0f);
 }
 
 //-----------------------------------------------------------------------------
@@ -86,40 +86,8 @@ void GLRenderer::DrawMesh(UINT meshId, POVector3* pos, POVector3* o)
 	glRotatef(o->_2, 0, 1, 0);
 	glRotatef(o->_3, 0, 0, 1);
 	glTranslatef(pos->_1, pos->_2, pos->_3);
-	glScalef (0.1, 0.1, 0.1);
-	//teapot(10, 1.0f, GL_LINE);
-	  glBegin(GL_QUADS);		// Draw The Cube Using quads
-	    glColor3f(0.0f,1.0f,0.0f);	// Color Blue
-	    glVertex3f( 1.0f, 1.0f,-1.0f);	// Top Right Of The Quad (Top)
-	    glVertex3f(-1.0f, 1.0f,-1.0f);	// Top Left Of The Quad (Top)
-	    glVertex3f(-1.0f, 1.0f, 1.0f);	// Bottom Left Of The Quad (Top)
-	    glVertex3f( 1.0f, 1.0f, 1.0f);	// Bottom Right Of The Quad (Top)
-	    glColor3f(1.0f,0.5f,0.0f);	// Color Orange
-	    glVertex3f( 1.0f,-1.0f, 1.0f);	// Top Right Of The Quad (Bottom)
-	    glVertex3f(-1.0f,-1.0f, 1.0f);	// Top Left Of The Quad (Bottom)
-	    glVertex3f(-1.0f,-1.0f,-1.0f);	// Bottom Left Of The Quad (Bottom)
-	    glVertex3f( 1.0f,-1.0f,-1.0f);	// Bottom Right Of The Quad (Bottom)
-	    glColor3f(1.0f,0.0f,0.0f);	// Color Red
-	    glVertex3f( 1.0f, 1.0f, 1.0f);	// Top Right Of The Quad (Front)
-	    glVertex3f(-1.0f, 1.0f, 1.0f);	// Top Left Of The Quad (Front)
-	    glVertex3f(-1.0f,-1.0f, 1.0f);	// Bottom Left Of The Quad (Front)
-	    glVertex3f( 1.0f,-1.0f, 1.0f);	// Bottom Right Of The Quad (Front)
-	    glColor3f(1.0f,1.0f,0.0f);	// Color Yellow
-	    glVertex3f( 1.0f,-1.0f,-1.0f);	// Top Right Of The Quad (Back)
-	    glVertex3f(-1.0f,-1.0f,-1.0f);	// Top Left Of The Quad (Back)
-	    glVertex3f(-1.0f, 1.0f,-1.0f);	// Bottom Left Of The Quad (Back)
-	    glVertex3f( 1.0f, 1.0f,-1.0f);	// Bottom Right Of The Quad (Back)
-	    glColor3f(0.0f,0.0f,1.0f);	// Color Blue
-	    glVertex3f(-1.0f, 1.0f, 1.0f);	// Top Right Of The Quad (Left)
-	    glVertex3f(-1.0f, 1.0f,-1.0f);	// Top Left Of The Quad (Left)
-	    glVertex3f(-1.0f,-1.0f,-1.0f);	// Bottom Left Of The Quad (Left)
-	    glVertex3f(-1.0f,-1.0f, 1.0f);	// Bottom Right Of The Quad (Left)
-	    glColor3f(1.0f,0.0f,1.0f);	// Color Violet
-	    glVertex3f( 1.0f, 1.0f,-1.0f);	// Top Right Of The Quad (Right)
-	    glVertex3f( 1.0f, 1.0f, 1.0f);	// Top Left Of The Quad (Right)
-	    glVertex3f( 1.0f,-1.0f, 1.0f);	// Bottom Left Of The Quad (Right)
-	    glVertex3f( 1.0f,-1.0f,-1.0f);	// Bottom Right Of The Quad (Right)
-	  glEnd();			// End Drawing The Cube
+	glScalef (0.0125, 0.0125, 0.0125);
+	teapot(10, 1.0f, GL_LINE);
 	glPopMatrix();
 }
 
@@ -138,20 +106,23 @@ void GLRenderer::DrawSprite(UINT textureId, RECT* src, POVector3* pos, float sx,
 	glLoadIdentity();
 	AntTexture* texture = GetTexture(textureId);
 	glBindTexture(GL_TEXTURE_2D, *(GLuint*)texture->texture);
-	//glScaled(sx, sw, 0.0);
 	//glRotatef(rotation, 0.0, 1.0, 0.0);
 	glTranslatef(pos->_1, pos->_2, 0.0);
+	glScaled(sx, sw, 0.0);
 
-	float texleft = src->x/texture->w;
-	float texright = (src->x+src->w)/texture->w;
-	float textop = (src->y+src->h)/texture->h;
-	float texbottom = src->y/texture->h;
+	float texleft = (src==NULL) ? 0 : src->x/texture->w;
+	float texright = (src==NULL) ? 1 : (src->x+src->w)/texture->w;
+	float textop = (src==NULL) ? 1 : (src->y+src->h)/texture->h;
+	float texbottom =(src==NULL) ? 0 :  src->y/texture->h;
+	float width = (src==NULL) ? texture->w : src->w;
+	float height = (src==NULL) ? texture->h : src->h;
 
 	glBegin(GL_QUADS);
-		glTexCoord2f(texright, textop);  glVertex3f(0, 0, 0);
-		glTexCoord2f(texleft, textop); glVertex3f(src->h, 0, 0);
-		glTexCoord2f(texleft, texbottom);glVertex3f(src->h, src->w, 0);
-		glTexCoord2f(texright, texbottom);  glVertex3f(0, src->w, 0);
+		glColor3f(1.0f,1.0f,1.0f);
+		glTexCoord2f(texleft, texbottom);  glVertex3f(0, 0, 0);
+		glTexCoord2f(texright, texbottom); glVertex3f(width, 0, 0);
+		glTexCoord2f(texright, textop);glVertex3f(width, height, 0);
+		glTexCoord2f(texleft, textop);  glVertex3f(0, height, 0);
 	glEnd();
 	glMatrixMode(GL_PROJECTION);
 	glPopMatrix();
@@ -172,14 +143,21 @@ void GLRenderer::DrawText(UINT fontId, const std::wstring* string, RECT* dst, An
 //-----------------------------------------------------------------------------
 void GLRenderer::DrawQuad(UINT textureID, RECT* rect, POVector3* pos, POVector3* o)
 {
+	glPushMatrix();
+	glEnable(GL_TEXTURE_2D);
+	//glRotatef(o->_2, 0, 1, 0);
+	glTranslatef(pos->_1, pos->_2, pos->_3);
 	glBindTexture(GL_TEXTURE_2D, *(GLuint*)GetTexture(textureID)->texture);
 
 	glBegin(GL_QUADS);
-	    glTexCoord2f(0, 0); glVertex3f(rect->left, rect->bottom, 0);
-	    glTexCoord2f(1, 0); glVertex3f(rect->right, rect->bottom, 0);
-	    glTexCoord2f(1, 1); glVertex3f(rect->right, rect->top, 0);
-	    glTexCoord2f(0, 1); glVertex3f(rect->left, rect->top, 0);
+		glColor3f(1.0f,1.0f,1.0f);
+	    glTexCoord2f(0, 1); glVertex3f(rect->left, 0, rect->bottom);
+	    glTexCoord2f(1, 1); glVertex3f(rect->right, 0, rect->bottom);
+	    glTexCoord2f(1, 0); glVertex3f(rect->right, 0, rect->top);
+	    glTexCoord2f(0, 0); glVertex3f(rect->left, 0, rect->top);
 	glEnd();
+
+	glPopMatrix();
 }
 
 //-----------------------------------------------------------------------------
@@ -193,7 +171,7 @@ void GLRenderer::AddFont(const std::wstring& typeFace, UINT width, UINT height)
 //-----------------------------------------------------------------------------
 // 
 //-----------------------------------------------------------------------------
-void GLRenderer::AddTexture(const std::wstring& fileName)
+void GLRenderer::AddTexture(UINT textureId, const std::wstring& fileName)
 {
 	AntTexture* texture = new AntTexture;
 	texture->h=0;
@@ -214,12 +192,13 @@ void GLRenderer::AddTexture(const std::wstring& fileName)
 	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
 	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
 	glTexImage2D( GL_TEXTURE_2D, 0, surface->format->BytesPerPixel, surface->w, surface->h, 0,
-			GL_RGBA, GL_UNSIGNED_BYTE, surface->pixels );
+			GL_RGB, GL_UNSIGNED_BYTE, surface->pixels );
 	texture->h=surface->h;
 	texture->w=surface->w;
 	SDL_FreeSurface( surface );
 	if (texture!=0) {
-		_textures.push_back(texture);
+		//_textures.push_back(texture);
+		_textures.insert(_textures.begin() + textureId, texture);
 	} else {
 		fprintf(stderr,"TextureLoadFailed(TryingToContinue)");
 	}
