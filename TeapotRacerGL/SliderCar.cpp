@@ -85,14 +85,14 @@ void SliderCar::Update(float timeDelta)
 	//Car Bob - simple method of floating the car simulating it is on a magnet and creating engine judder
 	if (depth < startdepth && !_falling)
 	{
-		POVector3 force;
+		/*POVector3 force;
 		if (depth <= startdepth - maxdepth)
 		{
 			force._2=constant;
 		} else {
 			force._2=constant*(depth-startdepth-maxdepth)/2*maxdepth;
 		}
-		_center.AddForce(force);
+		_center.AddForce(force);*/
 	} else {
 		_center.AddForce(POVector3(0.0f, -0.0009f, 0.0f));
 	}

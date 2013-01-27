@@ -61,6 +61,7 @@ void GLRenderer::SetView(POVector3* pos, POVector3* target)
 {
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+	glScalef (-1., 1., 1.);
 	gluLookAt(pos->_1, pos->_2, pos->_3,
 	          target->_1, target->_2, target->_3,
 	          0.0, 1.0, 0.0);
@@ -106,8 +107,8 @@ void GLRenderer::DrawSprite(UINT textureId, RECT* src, POVector3* pos, float sx,
 	glLoadIdentity();
 	AntTexture* texture = GetTexture(textureId);
 	glBindTexture(GL_TEXTURE_2D, *(GLuint*)texture->texture);
-	glRotatef(rotation, 0.0, 0.0, 1.0f);
 	glTranslatef(pos->_1, pos->_2, 0.0);
+	glRotatef(rotation, 1.0, 0.0, 0.0f);
 	glScaled(sx, sw, 0.0);
 
 	float texleft = (src==NULL) ? 0 : src->x/texture->w;
@@ -187,12 +188,16 @@ void GLRenderer::AddTexture(UINT textureId, const std::wstring& fileName)
 	SDL_Surface *surface;
 	surface = IMG_Load(buffer);
 	if (!surface) { fprintf(stderr,"TextureLoadFailed(FileNotFound)"); return; }
+	SDL_SetColorKey(surface, SDL_SRCCOLORKEY, SDL_MapRGB(surface->format, 255,0,255));
+	SDL_Surface* tmp=SDL_DisplayFormatAlpha(surface);
+	SDL_FreeSurface( surface );
+	surface = tmp;
 	glGenTextures( 1, (GLuint*)texture->texture );
 	glBindTexture( GL_TEXTURE_2D, *(GLuint*)texture->texture );
 	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
 	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
 	glTexImage2D( GL_TEXTURE_2D, 0, surface->format->BytesPerPixel, surface->w, surface->h, 0,
-			GL_RGB, GL_UNSIGNED_BYTE, surface->pixels );
+			GL_RGBA, GL_UNSIGNED_BYTE, surface->pixels );
 	texture->h=surface->h;
 	texture->w=surface->w;
 	SDL_FreeSurface( surface );

@@ -89,13 +89,13 @@ void Game::Update(float timeDelta)
 
 		/* Check where each car is currently and then set specific values for each type of game board cell */
 		int cell = GetBoardCellAt(sliderCar->GetPosition()->_1,sliderCar->GetPosition()->_3)[0];
-		if (cell==5) {						// Cell 5 boost the player up proportional to their x/z magnitude
+		if (cell==7) {						// Cell 5 boost the player up proportional to their x/z magnitude
 			//SliderCar.SetFloor(5.0f);
 			float mag = Magnitude(POVector3(sliderCar->GetCenter()->_velocity._1,0.0f,sliderCar->GetCenter()->_velocity._3));
 			sliderCar->GetCenter()->AddForce(POVector3(0.0f, mag*0.1, 0.0f));
 		} else if (cell==2) {				// Cell 2 sets the floor higher so the player gets closer to the camera
 			sliderCar->SetFloor(5.0f);
-		} else if (cell==1 ||cell==2 ||cell==3 ||cell==4) {	// Cells here are default, floor is 2.0f, so the slidercar floats
+		} else if (cell==1 ||cell==2 ||cell==3 ||cell==4 ||cell==5 ||cell==6) {	// Cells here are default, floor is 2.0f, so the slidercar floats
 			sliderCar->SetFloor(2.0f);
 		} else { // Any other cell (e.g. 0) the car is not on anything and therefor falls down.
 			sliderCar->SetFalling(true);
@@ -179,14 +179,14 @@ void Game::Update(float timeDelta)
 //-----------------------------------------------------------------------------
 void Game::LoadBoard() {
 	int tmpboard[10][10][2] = {
-		{{3,'l'},{2,'v'},{2,'v'},{2,'v'},{3,'d'},{0,'>'},{0,'>'},{0,'>'},{0,'>'},{0,'>'}},
-		{{1,'>'},{0,'>'},{0,'>'},{0,'>'},{4,'r'},{2,'v'},{3,'d'},{0,'>'},{0,'>'},{0,'>'}},
-		{{5,'>'},{0,'>'},{0,'>'},{0,'>'},{0,'>'},{0,'>'},{1,'<'},{0,'>'},{0,'>'},{0,'>'}},
+		{{6,'l'},{2,'v'},{2,'v'},{2,'v'},{4,'d'},{0,'>'},{0,'>'},{0,'>'},{0,'>'},{0,'>'}},
+		{{1,'>'},{0,'>'},{0,'>'},{0,'>'},{3,'r'},{2,'v'},{4,'d'},{0,'>'},{0,'>'},{0,'>'}},
+		{{7,'>'},{0,'>'},{0,'>'},{0,'>'},{0,'>'},{0,'>'},{1,'<'},{0,'>'},{0,'>'},{0,'>'}},
 		{{1,'>'},{0,'>'},{0,'>'},{0,'>'},{0,'>'},{0,'>'},{1,'<'},{0,'>'},{0,'>'},{0,'>'}},
 		{{3,'+'},{2,'^'},{4,'-'},{0,'>'},{0,'>'},{0,'>'},{1,'<'},{0,'>'},{0,'>'},{0,'>'}},
 		{{0,'>'},{0,'>'},{1,'>'},{0,'>'},{0,'>'},{0,'>'},{1,'<'},{0,'>'},{0,'>'},{0,'>'}},
 		{{0,'>'},{0,'>'},{3,'+'},{2,'^'},{4,'-'},{0,'>'},{1,'<'},{0,'>'},{0,'>'},{0,'>'}},
-		{{0,'>'},{0,'>'},{0,'>'},{0,'>'},{3,'+'},{2,'^'},{3,'o'},{0,'>'},{0,'>'},{0,'>'}},
+		{{0,'>'},{0,'>'},{0,'>'},{0,'>'},{3,'+'},{2,'^'},{5,'o'},{0,'>'},{0,'>'},{0,'>'}},
 		{{0,'>'},{0,'>'},{0,'>'},{0,'>'},{0,'>'},{0,'>'},{0,'>'},{0,'>'},{0,'>'},{0,'>'}},
 		{{0,'>'},{0,'>'},{0,'>'},{0,'>'},{0,'>'},{0,'>'},{0,'>'},{0,'>'},{0,'>'},{0,'>'}}
 	};

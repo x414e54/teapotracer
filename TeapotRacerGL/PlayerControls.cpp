@@ -19,7 +19,6 @@ PlayerControls::PlayerControls(Game* game) {
 bool PlayerControls::Event(UINT msg, UINT p1, UINT p2)
 {
 	if (_actor==NULL) { return false; }
-	fprintf(stderr,"%d %d",msg, p1);
 	switch(msg)
 	{
 	case ANTGUI_EVENT_KEYDOWN:

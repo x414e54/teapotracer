@@ -1,5 +1,6 @@
 #include "CarAI.h"
 #include "AntCore/AntMath.h"
+#include "AntCore/Ant.h"
 
 //-----------------------------------------------------------------------------
 // Update method
@@ -44,9 +45,9 @@ void CarAI::Update(float timeDelta)
 	} else if (cell[1]=='^') {
 		idealrot=-PI/2;
 	} else if (cell[1]=='<') {
-		idealrot=-10000.0f;					//	I was having some problems occured when the rotation was by PI, the AI would just constanly sPIn around, -10000 has been used, as the AI can 
-	} else if (cell[1]=='-') {				//  never rotate that amount, due to the limit of +PI and -PI in the slider car. the game then checks for -10000 and does a special case later on for it
-		idealrot=-PI/2+PI/4;				//  Improved methods could be done, but this sample is not for showing off any significant AI.
+		idealrot=-PI;
+	} else if (cell[1]=='-') {
+		idealrot=-PI/2+PI/4;
 	} else if (cell[1]=='v') {
 		idealrot=PI-PI/2;
 	} else if (cell[1]=='o') {
@@ -59,40 +60,19 @@ void CarAI::Update(float timeDelta)
 		idealrot=PI-PI/2-PI/4;
 	}
 
-	if (idealrot==-10000.0f && currentrot<0.0f)
+	float angle = CalcAngle(currentrot, idealrot);
+	if (angle < 0.0f)
 	{
-		if ((-PI-currentrot) < -0.001f) {
-			_actor->SetRotation(0.0f);
-		} else {
-			//_actor->SetRotation((-PI)-currentrot);
-			_actor->SetRotation(-0.003f);
-		}
-	} else if (idealrot==-10000.0f && currentrot>0.0f)
-	{
-		if ((PI-currentrot) < 0.001f) {
-			_actor->SetRotation(0.0f);
-		} else {
-			//_actor->SetRotation(PI-currentrot);
-			_actor->SetRotation(+0.003f);
-		}
-	} else if (idealrot==-10000.0f && currentrot==0.0f)
-	{
-		_actor->SetRotation(0.003f);
-	} else if ((currentrot-idealrot<0.001f && currentrot-idealrot >0.0f) || (idealrot-currentrot<0.001f && idealrot-currentrot >0.0f) || currentrot==idealrot) { _actor->SetRotation(0.0f); }
-	else if (currentrot>idealrot)
-	{
-		//_actor->SetRotation(-(currentrot-idealrot));
 		_actor->SetRotation(-0.003f);
-	}
-	else if (currentrot<idealrot)
+	} else if (angle > 0.0f	)
 	{
-		//_actor->SetRotation(+(idealrot-currentrot));
 		_actor->SetRotation(+0.003f);
+	} else {
+		_actor->SetRotation(0.0f);
 	}
 
-
-	// What sort is the cell infront of us? If its 0 or 5 we slow down.
-	if (cellFront[0]==0||cellFront[0]==5) {
+	// What sort is the cell infront of us? If its 0 or 7 we slow down.
+	if (cellFront[0]==0||cellFront[0]==7) {
 		_actor->SetThrottle(0.1f);
 	} else {
 		_actor->SetThrottle(0.4f);

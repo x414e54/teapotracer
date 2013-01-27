@@ -496,6 +496,19 @@ static void OffsetRect(RECT* rect, int x, int y)
 {
 }
 
+static float CalcAngle(float a1, float a2)
+{
+	float temp = a2 - a1;
+	if (temp >= PI)
+	{
+		temp = temp - PI - PI;
+	} else if (temp <= -PI)
+	{
+		temp = temp + PI + PI;
+	}
+	return temp;
+}
+
 struct POINT
 {
 	int x;

@@ -219,7 +219,7 @@ void Render(float timeDelta)
 				{
 				case 1:
 					Renderer->DrawQuad(TID_TRACKSTRAIGHT,&rect,POVector3((10.0f*i)+quadxoffset,0.0f,(10.0f*j+quadyoffset)),POVector3(0.0f,PI/2,0.0f)); // Different pieces will need different rotations
-					Renderer->DrawSprite(TID_TRACKSTRAIGHT,NULL,POVector3((16.0f*i)+xoffset,(-16.0f*j)+yoffset,0.0f), 0.125f, 0.125f, 0.0f);
+					Renderer->DrawSprite(TID_TRACKSTRAIGHT,NULL,POVector3((16.0f*i)+xoffset,(-16.0f*j)+yoffset,0.0f), 0.125f, 0.125f, PI/2);
 				break;
 				case 2:
 					Renderer->DrawQuad(TID_TRACKSTRAIGHT,&rect,POVector3((10.0f*i)+quadxoffset,0.0f,(10.0f*j+quadyoffset)),POVector3(0.0f,0.0f,0.0f));
@@ -227,13 +227,21 @@ void Render(float timeDelta)
 				break;
 				case 3:
 					Renderer->DrawQuad(TID_TRACKTURN,&rect,POVector3((10.0f*i)+quadxoffset,0.0f,(10.0f*j+quadyoffset)),POVector3(0.0f,PI/2,0.0f));
-					Renderer->DrawSprite(TID_TRACKTURN,NULL,POVector3((16.0f*i)+xoffset,(-16.0f*j)+yoffset,0.0f), 0.125f, 0.125f, 0.0f);
+					Renderer->DrawSprite(TID_TRACKTURN,NULL,POVector3((16.0f*i)+xoffset,(-16.0f*j)+yoffset,0.0f), 0.125f, 0.125f, PI/2);
 				break;
 				case 4:
+					Renderer->DrawQuad(TID_TRACKTURN,&rect,POVector3((10.0f*i)+quadxoffset,0.0f,(10.0f*j+quadyoffset)),POVector3(0.0f,-PI/2,0.0f));
+					Renderer->DrawSprite(TID_TRACKTURN,NULL,POVector3((16.0f*i)+xoffset,(-16.0f*j)+yoffset,0.0f), 0.125f, 0.125f, -PI/2);
+				break;
+				case 5:
 					Renderer->DrawQuad(TID_TRACKTURN,&rect,POVector3((10.0f*i)+quadxoffset,0.0f,(10.0f*j+quadyoffset)),POVector3(0.0f,0.0f,0.0f));
 					Renderer->DrawSprite(TID_TRACKTURN,NULL,POVector3((16.0f*i)+xoffset,(-16.0f*j)+yoffset,0.0f), 0.125f, 0.125f, 0.0f);
 				break;
-				case 5:
+				case 6:
+					Renderer->DrawQuad(TID_TRACKTURN,&rect,POVector3((10.0f*i)+quadxoffset,0.0f,(10.0f*j+quadyoffset)),POVector3(0.0f,PI,0.0f));
+					Renderer->DrawSprite(TID_TRACKTURN,NULL,POVector3((16.0f*i)+xoffset,(-16.0f*j)+yoffset,0.0f), 0.125f, 0.125f, PI);
+				break;
+				case 7:
 					Renderer->DrawQuad(TID_TRACKBRIDGE,&rect,POVector3((10.0f*i)+quadxoffset,0.0f,(10.0f*j+quadyoffset)),POVector3(0.0f,0.0f,0.0f));
 					Renderer->DrawSprite(TID_TRACKBRIDGE,NULL,POVector3((16.0f*i)+xoffset,(-16.0f*j)+yoffset,0.0f), 0.125f, 0.125f, 0.0f);
 				break;
